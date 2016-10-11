@@ -1,0 +1,37 @@
+.condition-view {
+    height: 15%;
+    width: 100%;
+    border: 1px solid #eee;
+    text-align: right;
+}
+
+.input-text {
+    font-size: 40px;
+    color: #777;
+}
+
+.result-view {
+    height: 15%;
+    width: 100%;
+    border: 1px solid #eee;
+    text-align: right;
+}
+
+.result-text {
+    font-size: 75px;
+}
+
+.number-view {
+    height: 70%;
+}
+
+.number-view button {
+    float: left;
+    width: 25%;
+    height: 20%;
+    padding-top: 15rpx;
+}
+
+.number-view .two-column {
+    width: 50%;
+}

@@ -1,0 +1,8 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 300rpx;
+  box-sizing: border-box;
+} 
