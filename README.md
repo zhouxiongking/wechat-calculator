@@ -4,7 +4,7 @@
 
 ### 效果图
 
-![](image/demo.png)
+![](image/demo.png =500*748)
 
 ### 使用方法
 - clone项目 
