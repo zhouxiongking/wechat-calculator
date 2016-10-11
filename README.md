@@ -4,7 +4,7 @@
 
 ### 效果图
 
-![](image/demo.png =500*748)
+<img src='image/demo.png' width='500'/>
 
 ### 使用方法
 - clone项目 
