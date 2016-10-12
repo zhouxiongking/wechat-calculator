@@ -1,5 +1,12 @@
+.container {
+    height: 1242rpx;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+} 
+
 .condition-view {
-    height: 15%;
+    height: 186.3rpx;
     width: 100%;
     border: 1px solid #eee;
     text-align: right;
@@ -11,7 +18,7 @@
 }
 
 .result-view {
-    height: 15%;
+    height: 186.3rpx;
     width: 100%;
     border: 1px solid #eee;
     text-align: right;
@@ -22,14 +29,14 @@
 }
 
 .number-view {
-    height: 70%;
+    height: 869.4rpx;
 }
 
 .number-view button {
     float: left;
     width: 25%;
     height: 20%;
-    padding-top: 15rpx;
+    padding-top: 37.5rpx;
 }
 
 .number-view .two-column {

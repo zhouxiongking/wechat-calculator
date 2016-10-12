@@ -4,8 +4,8 @@ var app = getApp()
 Page({
     data: {
         input: '',
-        first: '0',
-        second: '0',
+        first: '',
+        second: '',
         operateSymbol: '',
         result: 0
     },
@@ -18,7 +18,7 @@ Page({
         var finalInput = '';
         finalInput += firstNum;
         finalInput += operationSymbol === '' ? '' : (' ' + operationSymbol + ' ');
-        finalInput += secondNum === '0' ? '' : secondNum;
+        finalInput += secondNum;
         that.setData({
             input: finalInput
         });
@@ -34,15 +34,21 @@ Page({
         if (content === '0') {
             //存在运算符，针对第二个数
             if (operationSymbol && operationSymbol.length > 0) {
-                if (secondNum === '0') {
+                if (secondNum === '' || secondNum === '0') {
+                    this.setData({
+                        second: '0'
+                    });
                     return;
                 }
                 this.setData({
                     second: secondNum + content
                 });
             } else {
-                if (firstNum === '0') {
-                  return;
+                if (firstNum === '' || firstNum === '0') {
+                    that.setData({
+                        first: '0'
+                    });
+                    return;
                 }
                 that.setData({
                     first: firstNum + content
@@ -56,6 +62,9 @@ Page({
                 if (secondNum.indexOf('.') >= 0) {
                     return;
                 } else {
+                    if (secondNum === '') {
+                        secondNum = '0'
+                    }
                     that.setData({
                         second: secondNum + content
                     });
@@ -65,6 +74,9 @@ Page({
                 if (firstNum.indexOf('.') >= 0) {
                     return;
                 } else {
+                    if (firstNum === '') {
+                        firstNum = '0';
+                    }
                     that.setData({
                         first: firstNum + content
                     });
@@ -89,20 +101,30 @@ Page({
     tapOperateSymbol: function (event) {
         var that = this;
         var content = event.target.dataset.content;
+        var firstNum = that.data.first;
+        var result = that.data.result;
         //如果是+-×÷操作运算符
         if (content == '÷' || content == '×' || content == '+' || content == '-') {
             that.setData({
                 operateSymbol: content
             });
+            
+            if (result != '' && firstNum === '') {
+                that.setData({
+                    first: result
+                });
+            }
             that.showInput();
         } else {
             //如果是=操作符，则计算结果
             var firstNum = that.data.first;
             var secondNum = that.data.second;
             var operationSymbol = that.data.operateSymbol;
-            var firstNumber = parseFloat(firstNum);
-            var secondNumber = parseFloat(secondNum);
-            that.calculate(firstNumber, secondNumber, operationSymbol);
+            if (operationSymbol !== '') {
+                var firstNumber = parseFloat(firstNum);
+                var secondNumber = parseFloat(secondNum);
+                that.calculate(firstNumber, secondNumber, operationSymbol);
+            }
         }
     },
     //计算结果
@@ -119,45 +141,33 @@ Page({
                 return;
             }
             var tempResult = first / second + '';
-            if (tempResult.indexOf('\.') >= 0) {
-                var length = tempResult.split('\.')[1].length;
-                if (length > 6) {
-                    tempResult = new Number(tempResult).toFixed(6);
-                }
-            }
+            tempResult = that.dealResult(tempResult);
             that.setData({
                 result: tempResult
             });
         }
         if (operationSymbol === '×') {
             flag = false;
-
             var tempResult = first * second + '';
-            if (tempResult.indexOf('\.') >= 0) {
-                var length = tempResult.split('\.')[1].length;
-                if (length > 6) {
-                    tempResult = new Number(tempResult).toFixed(6);
-                    //去掉小数点后多余的0
-                    var integer = (tempResult + '').split('\.')[0];
-                    var decimal = (tempResult + '').split('\.')[1];
-                    decimal = that.removeZero(decimal);
-                    tempResult = integer + '.' + decimal;
-                }
-            }
+            tempResult = that.dealResult(tempResult);
             that.setData({
                 result: tempResult
             });
         }
         if (operationSymbol === '+') {
             flag = false;
+            var tempResult = first + second + '';
+            tempResult = that.dealResult(tempResult);
             that.setData({
-                result: first + second
+                result: tempResult
             });
         }
         if (operationSymbol === '-') {
             flag = false;
+            var tempResult = first - second + '';
+            tempResult = that.dealResult(tempResult);
             that.setData({
-                result: first - second
+                result: tempResult
             });
         }
         //没有运算符的情况下，按下=等号键，默认为第一个数本身
@@ -169,8 +179,8 @@ Page({
         //计算完之后，判断flag是否为true，如果为true则表明为进行计算，则不需要重置操作
         if (!flag) {
             that.setData({
-                first: '0',
-                second: '0',
+                first: '',
+                second: '',
                 operateSymbol: '',
             });
         }
@@ -180,8 +190,8 @@ Page({
         var that = this;
         that.setData({
             input: '',
-            first: '0',
-            second: '0',
+            first: '',
+            second: '',
             operateSymbol: '',
             result: 0
         });
@@ -263,5 +273,20 @@ Page({
         }
         decimal = decimal.substring(0, decimal.length - index);
         return decimal;
+    },
+    dealResult: function (tempResult) {
+        var that = this;
+        if (tempResult.indexOf('\.') >= 0) {
+            var length = tempResult.split('\.')[1].length;
+            if (length > 6) {
+                tempResult = new Number(tempResult).toFixed(6);
+                //去掉小数点后多余的0
+                var integer = (tempResult + '').split('\.')[0];
+                var decimal = (tempResult + '').split('\.')[1];
+                decimal = that.removeZero(decimal);
+                tempResult = integer + '.' + decimal;
+            }
+        }
+        return tempResult;
     }
 })
